@@ -27,5 +27,3 @@ mongoose.connect(`mongodb+srv://${dbUser}:${dbPassword}@apicluster.tg0liil.mongo
     console.log('Conectado ao MongoDB');
 })
 .catch((err) => console.log(err))
-
-/* app.listen(3000); */

@@ -1,9 +1,9 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const Person = mongoose.model('Person', {
-    name: String,
-    salary: Number,
-    approved: Boolean,
-})
+const Person = mongoose.model("Person", {
+  name: String,
+  salary: Number,
+  approved: Boolean,
+});
 
-module.exports = Person
+module.exports = Person;
