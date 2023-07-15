@@ -6,6 +6,8 @@ require('dotenv').config();
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
+const Person = require('./models/Person')
+
 // forma de ler JSON / middlewares
 app.use(
   express.urlencoded({
