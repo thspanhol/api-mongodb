@@ -6,8 +6,6 @@ require("dotenv").config();
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASSWORD;
 
-const Person = require("./models/Person");
-
 // forma de ler JSON / middlewares
 app.use(
   express.urlencoded({
@@ -18,30 +16,10 @@ app.use(
 app.use(express.json());
 
 // rotas da API
-app.post('/person', async (req, res) => {
-  // req.body
-  const {name, salary, approved} = req.body
 
-  if(!name || !salary || !approved) {
-    res.status(422).json({error: 'Não cumpriu com os dados obrigatórios!'})
-  }
+const personRoutes = require('./routes/personRoutes')
 
-  const person = {
-    name,
-    salary,
-    approved
-  }
-
-  try {
-    await Person.create(person)
-
-    res.status(201).json({message: 'Pessoa inserida no sistema com sucesso!'})
-
-  } catch (error) {
-    res.status(500).json({error: error})
-  }
-
-})
+app.use('/person', personRoutes)
 
 // rota inicial / endpoint
 app.get("/", (req, res) => {
