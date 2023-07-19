@@ -22,6 +22,10 @@ app.post('/person', async (req, res) => {
   // req.body
   const {name, salary, approved} = req.body
 
+  if(!name || !salary || !approved) {
+    res.status(422).json({error: 'Não cumpriu com os dados obrigatórios!'})
+  }
+
   const person = {
     name,
     salary,
