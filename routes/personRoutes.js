@@ -1,122 +1,101 @@
-const router = require('express').Router()
-
+const router = require("express").Router();
 const Person = require("../models/Person");
 
 // Create
-router.post('/', async (req, res) => {
-    // req.body
-    const {name, salary, approved} = req.body
-  
-    if(!name || !salary || approved === undefined) {
-      res.status(422).json({error: 'Não cumpriu com os dados obrigatórios!'})
-      return
-    }
-        const person = {
-            name,
-            salary,
-            approved
-          }
-        
-          try {
-            await Person.create(person)
-        
-            res.status(201).json({message: 'Pessoa inserida no sistema com sucesso!'})
-        
-          } catch (error) {
-            res.status(500).json({error: error})
-          }
-    
-  
-  })
+router.post("/", async (req, res) => {
+  const { name, salary, approved } = req.body;
 
-  // Read
-  router.get('/', async (req, res) => {
+  if (!name || !salary || approved === undefined) {
+    res.status(422).json({ error: "Não cumpriu com os dados obrigatórios!" });
+    return;
+  }
+  const person = {
+    name,
+    salary,
+    approved,
+  };
 
-    try {
+  try {
+    await Person.create(person);
 
-        const people = await Person.find()
+    res
+      .status(201)
+      .json({ message: "Pessoa inserida no sistema com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
 
-        res.status(200).json(people)
+// Read
+router.get("/", async (req, res) => {
+  try {
+    const people = await Person.find();
 
-    } catch (error) {
-        res.status(500).json({error: error})
-      }
+    res.status(200).json(people);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
 
-  })
+router.get("/:id", async (req, res) => {
+  const id = req.params.id;
 
-  router.get('/:id', async (req, res) => {
-
-    const id = req.params.id
-
-    try {
-
-        const person = await Person.findOne({_id: id})
-
-        if (!person) {
-            res.status(422).json({message: 'O usuário não foi encontrado'})
-            return
-        }
-
-        res.status(200).json(person)
-
-    } catch (error) {
-        res.status(500).json({error: error})
-      }
-
-  })
-
-  // Update
-router.patch('/:id', async(req, res) => {
-
-    const id = req.params.id
-
-    const {name, salary, approved} = req.body
-
-    const person = {
-        name,
-        salary,
-        approved
-      }
-
-      try {
-
-        const updatedPerson = await Person.updateOne({_id: id}, person)
-
-        if(updatedPerson.matchedCount === 0) {
-            res.status(422).json({message: 'O usuário não foi encontrado'})
-            return
-        }
-
-        res.status(200).json(person)
-
-    } catch (error) {
-        res.status(500).json({error: error})
-      }
-
-})
-
-// Delete
-router.delete('/:id', async (req, res) => {
-
-    const id = req.params.id
-
-    const person = await Person.findOne({_id: id})
+  try {
+    const person = await Person.findOne({ _id: id });
 
     if (!person) {
-        res.status(422).json({message: 'O usuário não foi encontrado!'})
-        return
+      res.status(422).json({ message: "O usuário não foi encontrado" });
+      return;
     }
 
-    try {
+    res.status(200).json(person);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
 
-        await Person.deleteOne({_id: id})
+// Update
+router.patch("/:id", async (req, res) => {
+  const id = req.params.id;
+  const { name, salary, approved } = req.body;
 
-        res.status(200).json({message: 'Usuário removido com sucesso!'})
+  const person = {
+    name,
+    salary,
+    approved,
+  };
 
-    } catch (error) {
-        res.status(500).json({error: error})
-      }
+  try {
+    const updatedPerson = await Person.updateOne({ _id: id }, person);
 
-})
+    if (updatedPerson.matchedCount === 0) {
+      res.status(422).json({ message: "O usuário não foi encontrado" });
+      return;
+    }
 
-  module.exports = router;
+    res.status(200).json(person);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+// Delete
+router.delete("/:id", async (req, res) => {
+  const id = req.params.id;
+  const person = await Person.findOne({ _id: id });
+
+  if (!person) {
+    res.status(422).json({ message: "O usuário não foi encontrado!" });
+    return;
+  }
+
+  try {
+    await Person.deleteOne({ _id: id });
+
+    res.status(200).json({ message: "Usuário removido com sucesso!" });
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+});
+
+module.exports = router;
